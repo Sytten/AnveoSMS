@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"github.com/sytten/anveosms/pkg/config"
+	"github.com/sytten/anveosms/pkg/email"
 	"net/http"
 	"os"
 	"os/signal"
@@ -15,12 +17,24 @@ import (
 
 func main() {
 	logger, _ := zap.NewProduction()
+	logger = logger.Named("anveoSms")
+
+	// Config
+	configuration, err := config.NewConfiguration()
+	if err != nil {
+		logger.Error("Unable to load the configuration", zap.Error(err))
+		return
+	}
 
 	// Services
-	ss := sms.NewService()
+	emailService := email.NewLoggingService(
+		logger.Named("email"),
+		email.NewService(configuration),
+	)
+	smsService := sms.NewService(emailService, logger.Named("sms"))
 
 	// Server
-	srv := server.New(ss, logger)
+	srv := server.New(smsService, logger)
 
 	// Start
 	errs := make(chan error, 2)
