@@ -15,7 +15,7 @@ func NewLoggingService(logger *zap.Logger, s Service) Service {
 	return &loggingService{logger, s}
 }
 
-func (s *loggingService) Send(content string) (err error) {
+func (s *loggingService) Send(plaintTextContent string, htmlContent string) (err error) {
 	defer func(begin time.Time) {
 		s.logger.Info(
 			"Email sent",
@@ -24,5 +24,5 @@ func (s *loggingService) Send(content string) (err error) {
 			zap.Error(err),
 		)
 	}(time.Now())
-	return s.next.Send(content)
+	return s.next.Send(plaintTextContent, htmlContent)
 }

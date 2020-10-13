@@ -2,12 +2,13 @@ package main
 
 import (
 	"fmt"
-	"github.com/sytten/anveosms/pkg/config"
-	"github.com/sytten/anveosms/pkg/email"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
+
+	"github.com/sytten/anveosms/pkg/config"
+	"github.com/sytten/anveosms/pkg/email"
 
 	"go.uber.org/zap"
 
@@ -31,7 +32,7 @@ func main() {
 		logger.Named("email"),
 		email.NewService(configuration),
 	)
-	smsService := sms.NewService(emailService, logger.Named("sms"))
+	smsService := sms.NewService(emailService, configuration, logger.Named("sms"))
 
 	// Server
 	srv := server.New(smsService, logger)

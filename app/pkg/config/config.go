@@ -3,13 +3,18 @@ package config
 import "github.com/spf13/viper"
 
 type Configuration struct {
-	Email EmailConfiguration
+	Email   EmailConfiguration
+	Hosting HostingConfiguration
 }
 
 type EmailConfiguration struct {
 	SendgridApiKey string
 	From           string
 	To             string
+}
+
+type HostingConfiguration struct {
+	BucketUrl string
 }
 
 func NewConfiguration() (*Configuration, error) {
