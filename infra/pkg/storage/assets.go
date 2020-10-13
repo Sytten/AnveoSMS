@@ -10,7 +10,8 @@ import (
 type Assets struct {
 	pulumi.ResourceState
 
-	bucket *storage.Bucket
+	bucket  *storage.Bucket
+	objects []*storage.BucketObject
 }
 
 func NewAssets(ctx *pulumi.Context, name string, opts ...pulumi.ResourceOption) (*Assets, error) {
@@ -37,6 +38,18 @@ func NewAssets(ctx *pulumi.Context, name string, opts ...pulumi.ResourceOption) 
 		return nil, err
 	}
 	assets.bucket = bucket
+
+	// Upload images
+	image, err := storage.NewBucketObject(ctx, fmt.Sprintf("%s-assets-logo", name), &storage.BucketObjectArgs{
+		Bucket:      bucket.Name,
+		Name:        pulumi.String("logo.png"),
+		ContentType: pulumi.String("image/png"),
+		Source:      pulumi.NewFileAsset("./assets/logo.png"),
+	})
+	if err != nil {
+		return nil, err
+	}
+	assets.objects = append(assets.objects, image)
 
 	return assets, nil
 }
