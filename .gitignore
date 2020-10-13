@@ -16,3 +16,4 @@
 
 # Configuration
 config.yml
+Pulumi.prod.yaml
