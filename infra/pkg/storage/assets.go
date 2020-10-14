@@ -53,3 +53,7 @@ func NewAssets(ctx *pulumi.Context, name string, opts ...pulumi.ResourceOption) 
 
 	return assets, nil
 }
+
+func (a *Assets) GetUrl() pulumi.StringOutput {
+	return pulumi.Sprintf("https://storage.googleapis.com/%s", a.bucket.Name)
+}
