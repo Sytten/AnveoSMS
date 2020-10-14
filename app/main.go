@@ -21,7 +21,7 @@ func main() {
 	logger = logger.Named("anveoSms")
 
 	// Config
-	configuration, err := config.NewConfiguration()
+	configuration, err := config.NewConfiguration(logger.Named("config"))
 	if err != nil {
 		logger.Error("Unable to load the configuration", zap.Error(err))
 		return

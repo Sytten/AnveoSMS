@@ -1,6 +1,10 @@
 package config
 
-import "github.com/spf13/viper"
+import (
+	"os"
+
+	"go.uber.org/zap"
+)
 
 type Configuration struct {
 	Email   EmailConfiguration
@@ -17,23 +21,24 @@ type HostingConfiguration struct {
 	BucketUrl string
 }
 
-func NewConfiguration() (*Configuration, error) {
-	v := viper.New()
-
-	// Set the config file details
-	v.SetConfigName("config")
-	v.SetConfigType("yml")
-	v.AddConfigPath(".")
-
-	// Read the configuration
-	if err := v.ReadInConfig(); err != nil {
-		return nil, err
+func NewConfiguration(logger *zap.Logger) (*Configuration, error) {
+	// Load from file
+	config, err := loadFromFile()
+	if config != nil {
+		return config, nil
 	}
 
-	var config Configuration
-	if err := v.Unmarshal(&config); err != nil {
-		return nil, err
+	// Load from secret
+	secretName := os.Getenv("APP_SECRET")
+	if secretName != "" {
+		config, err := loadFromSecret(secretName)
+		if err != nil {
+			logger.Warn("Unable to load secret", zap.Error(err))
+		}
+		if config != nil {
+			return config, nil
+		}
 	}
 
-	return &config, nil
+	return nil, err
 }
