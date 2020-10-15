@@ -1,0 +1,5 @@
+.git/
+bin/
+config.yml
+*.log
+Dockerfile
