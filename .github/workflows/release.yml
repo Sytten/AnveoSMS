@@ -21,5 +21,6 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: docker.pkg.github.com
           repository: sytten/anveosms/anveosms
+          path: "./app"
           tags: ${{ env.TAG }}
           build_args: BUILD_VERSION=${{ env.TAG }}
