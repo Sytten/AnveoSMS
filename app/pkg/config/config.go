@@ -29,7 +29,7 @@ func NewConfiguration(logger *zap.Logger) (*Configuration, error) {
 	}
 
 	// Load from secret
-	secretName := os.Getenv("APP_SECRET")
+	secretName := os.Getenv("APP_SECRET_NAME")
 	if secretName != "" {
 		config, err := loadFromSecret(secretName)
 		if err != nil {
