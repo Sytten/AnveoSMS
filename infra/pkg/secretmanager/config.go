@@ -13,6 +13,7 @@ import (
 type Config struct {
 	pulumi.ResourceState
 
+	name   string
 	secret *secretmanager.Secret
 }
 
@@ -22,7 +23,7 @@ type ConfigArgs struct {
 
 func NewConfig(ctx *pulumi.Context, name string, args *ConfigArgs, opts ...pulumi.ResourceOption) (*Config, error) {
 	// Create component
-	c := &Config{}
+	c := &Config{name: name}
 	err := ctx.RegisterComponentResource("pkg:secretmanager:Config", name, c, opts...)
 	if err != nil {
 		return nil, err
@@ -56,6 +57,10 @@ func NewConfig(ctx *pulumi.Context, name string, args *ConfigArgs, opts ...pulum
 	}
 
 	return c, nil
+}
+
+func (s *Config) GetSecretName() pulumi.StringOutput {
+	return s.secret.Name
 }
 
 func buildYamlConfiguration(ctx *pulumi.Context, args *ConfigArgs) (pulumi.StringOutput, error) {

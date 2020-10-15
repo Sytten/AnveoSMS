@@ -12,3 +12,4 @@ The monthly cost should not be more than a few cents per month.
 ## Setup
 Before we can deploy the infrastructure, we need to enable a few GCP APIs:
 - `gcloud services enable secretmanager.googleapis.com`
+- `gcloud services enable run.googleapis.com`
