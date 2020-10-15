@@ -9,6 +9,11 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v2
 
+      - name: Prepare tag
+        run: |
+          TAG=$(echo $GITHUB_REF | grep -o "[0-9][\.].*")
+          echo "TAG=$TAG" >> $GITHUB_ENV
+
       - name: Build and push image
         uses: docker/build-push-action@v1
         with:
@@ -16,4 +21,5 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: docker.pkg.github.com
           repository: sytten/anveosms/anveosms
-          tag_with_ref: true
+          tags: $TAG
+          build_args: BUILD_VERSION=$TAG
