@@ -16,6 +16,8 @@ import (
 	"github.com/sytten/anveosms/pkg/sms"
 )
 
+var BuildVersion = "development"
+
 func main() {
 	logger, _ := zap.NewProduction()
 	logger = logger.Named("anveoSms")
@@ -40,7 +42,7 @@ func main() {
 	// Start
 	errs := make(chan error, 2)
 	go func() {
-		logger.Info("server started")
+		logger.Info("server started", zap.String("version", BuildVersion))
 		errs <- http.ListenAndServe("0.0.0.0:9000", srv)
 	}()
 	go func() {

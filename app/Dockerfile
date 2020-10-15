@@ -1,6 +1,8 @@
 # BUILDER STAGE
 FROM golang:1.15-alpine as builder
 
+ARG BUILD_VERSION
+
 WORKDIR /build
 
 # Install dependencies
@@ -24,7 +26,7 @@ ENV GO111MODULE=on \
 
 COPY . .
 
-RUN go build -ldflags="-w -s" -o main .
+RUN go build -ldflags="-w -s -X main.BuildVersion=$BUILD_VERSION" -o main .
 
 # RUNTIME STAGE
 FROM scratch
