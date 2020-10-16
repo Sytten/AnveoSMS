@@ -1,0 +1,6 @@
+email:
+  sendgridApiKey: SG.Something
+  from: sms@example.com
+  to: me@example.com
+hosting:
+  bucketUrl: https://storage.googleapis.com/some-bucket
