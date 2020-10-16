@@ -16,6 +16,11 @@ AnveoSMS is a small program to receive your SMS from [Anveo](http://www.anveo.co
 - Send them to any email using [Sengrid](https://sendgrid.com/)
 - Deployment infrastructure on GCP
 
+## 🏗️ How to deploy?
+
+- The suggested way of deploying it is using the provided `Infrastructure as Code` in the [infra](https://github.com/Sytten/AnveoSMS/tree/main/infra) folder. This will deploy it on GCP Cloud Run which is very cheap. As I build more and more features, I plan to rely heavily on GCP features so this will eventually be the only way of deploying.
+- If you want to host it yourself, you can use the [Docker images](https://github.com/Sytten/AnveoSMS/packages/445142) I build for every release. See the configuration setup in the [app](https://github.com/Sytten/AnveoSMS/tree/main/app) folder.
+
 ## 💡 Ideas for future features
 
 - Store them in a database
