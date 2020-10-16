@@ -28,6 +28,7 @@ func loadFromSecret(secretName string) (*Configuration, error) {
 
 	// Load config
 	v := viper.New()
+	v.SetConfigType("yml")
 	err = v.ReadConfig(bytes.NewBuffer(secret.Payload.Data))
 	if err != nil {
 		return nil, err
