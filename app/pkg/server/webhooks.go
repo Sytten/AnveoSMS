@@ -16,7 +16,7 @@ type webhooksHandler struct {
 func (h *webhooksHandler) route() chi.Router {
 	r := chi.NewRouter()
 
-	r.Post("/anveo", h.receiveAnveoSMS)
+	r.Get("/anveo", h.receiveAnveoSMS)
 
 	return r
 }
