@@ -20,11 +20,23 @@ func main() {
 		config, err := secretmanager.NewConfig(ctx, "app", &secretmanager.ConfigArgs{
 			Assets: assets,
 		})
+		if err != nil {
+			return err
+		}
 
 		// Service
+		image, err := service.NewImage(ctx, "anveosms")
+		if err != nil {
+			return err
+		}
+
 		_, err = service.NewApplication(ctx, "anveosms", &service.ApplicationArgs{
 			Config: config,
+			Image:  image,
 		})
+		if err != nil {
+			return err
+		}
 
 		return nil
 	})

@@ -22,6 +22,7 @@ type Application struct {
 
 type ApplicationArgs struct {
 	Config *secretmanager.Config
+	Image  *Image
 }
 
 func NewApplication(ctx *pulumi.Context, name string, args *ApplicationArgs, opts ...pulumi.ResourceOption) (*Application, error) {
@@ -49,8 +50,6 @@ func NewApplication(ctx *pulumi.Context, name string, args *ApplicationArgs, opt
 		return nil, err
 	}
 
-	container
-
 	// Create service
 	service, err := cloudrun.NewService(ctx, fmt.Sprintf("%s-api", name), &cloudrun.ServiceArgs{
 		Location:                 pulumi.String(config.Require(ctx, "gcp:region")),
@@ -69,7 +68,12 @@ func NewApplication(ctx *pulumi.Context, name string, args *ApplicationArgs, opt
 				ContainerConcurrency: pulumi.Int(80),
 				Containers: cloudrun.ServiceTemplateSpecContainerArray{
 					cloudrun.ServiceTemplateSpecContainerArgs{
-						Image: pulumi.Sprintf("docker.pkg.github.com/sytten/anveosms/anveosms:%s", config.Require(ctx, "app:version")),
+						Image: args.Image.GetName(),
+						Ports: cloudrun.ServiceTemplateSpecContainerPortArray{
+							cloudrun.ServiceTemplateSpecContainerPortArgs{
+								ContainerPort: pulumi.Int(9000),
+							},
+						},
 						Resources: cloudrun.ServiceTemplateSpecContainerResourcesArgs{
 							Limits: pulumi.StringMap{"cpu": pulumi.String("1000m"), "memory": pulumi.String("1024Mi")},
 						},
@@ -89,6 +93,17 @@ func NewApplication(ctx *pulumi.Context, name string, args *ApplicationArgs, opt
 		return nil, err
 	}
 	app.service = service
+
+	// Create service access
+	_, err = cloudrun.NewIamMember(ctx, fmt.Sprintf("%s-api-access"), &cloudrun.IamMemberArgs{
+		Service:  service.Name,
+		Location: pulumi.String(config.Require(ctx, "gcp:region")),
+		Role:     pulumi.String("roles/run.invoker"),
+		Member:   pulumi.String("allUsers"),
+	}, pulumi.Parent(app))
+	if err != nil {
+		return nil, err
+	}
 
 	return app, nil
 }
