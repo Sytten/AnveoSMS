@@ -107,3 +107,12 @@ func NewApplication(ctx *pulumi.Context, name string, args *ApplicationArgs, opt
 
 	return app, nil
 }
+
+func (a *Application) GetURL() pulumi.StringOutput {
+	return a.service.Status.Url().ApplyString(func(endpoint *string) string {
+		if endpoint != nil {
+			return *endpoint
+		}
+		return "<CLOUD RUN ENDPOINT NOT YET AVAILABLE, RERUN>"
+	})
+}

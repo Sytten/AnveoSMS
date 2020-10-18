@@ -30,13 +30,16 @@ func main() {
 			return err
 		}
 
-		_, err = service.NewApplication(ctx, "anveosms", &service.ApplicationArgs{
+		application, err := service.NewApplication(ctx, "anveosms", &service.ApplicationArgs{
 			Config: config,
 			Image:  image,
 		})
 		if err != nil {
 			return err
 		}
+
+		// Export template for anveo
+		ctx.Export("Anveo URL", pulumi.Sprintf("%v/webhooks/anveo?from=$[from]$&to=$[to]$&message=$[message]$", application.GetURL()))
 
 		return nil
 	})
