@@ -1,3 +1,17 @@
 name: anveosms
 runtime: go
 description: AnveoSMS Deployment
+template:
+  config:
+    email:from:
+      description: The sender of the emails
+    email:sendgridApiKey:
+      description: The Sendgrid API Key
+      secret: true
+    email:to:
+      description: The receiver of the emails
+    gcp:project:
+      description: The GCP project to deploy into
+    gcp:region:
+      description: The GCP region to deploy into
+      default: us-east1
