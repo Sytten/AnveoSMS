@@ -5,7 +5,7 @@ This is the application project itself, please follow these instructions **only 
 ## ⚠️ Requirements
 
 - Golang >1.15
-- A Sengrid API key
+- A Sengrid API key: [Guide](https://github.com/Sytten/AnveoSMS/blob/main/docs/SENDGRID.md)
 - A Public Bucket or CDN
 
 ## 🏎️ Getting started
